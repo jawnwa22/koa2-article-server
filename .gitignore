@@ -2,3 +2,4 @@ node_modules
 common.js
 articles
 uploads
+.DS_Store
