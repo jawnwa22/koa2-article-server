@@ -22,13 +22,13 @@ class ArticleController {
    */
   static async upload(ctx) {
     let mdfile = ctx.request.files.mdfile;
-    let md = ctx.query;
     
+    let md = ctx.query;
+
     let isExist = await ArticleModel.findOne({name: mdfile.name});
     
-    let tag = md.tag.split(',');
-
-
+    let tag = md['tag[]']
+  
     // 插入文章到数据库
     const add_article = async () => {
       const add_tag = (tag) => {
@@ -40,7 +40,7 @@ class ArticleController {
       let article = {
         name: mdfile.name,
         createdAt: md.createdAt,
-        categoryID: mongoose.Types.ObjectId(md.categoryID),
+        categoryID: mongoose.Types.ObjectId(md.category),
         tagID: (await add_tag(tag))._id,
       }
       
@@ -57,8 +57,7 @@ class ArticleController {
     const moveToAricles = (file) => {
       return new Promise((resolve, reject) => {
         fs.rename(file.path, './articles/' + file.name, (err) => {
-          if (err) reject(err);
-          resolve(true);
+          err ? reject(err) : resolve(true);
         })
       })
     }
@@ -67,8 +66,7 @@ class ArticleController {
     const removeFile = (file) => {
       return new Promise((resolve, reject) => {
         fs.unlink(file.path, function (err) {
-          if (err) reject(err);
-          resolve(true);
+          err ? reject(err) : resolve(true);
         })
       })
  
@@ -123,6 +121,8 @@ class ArticleController {
           let content = data ? marked(data) : '';
           let title = data ? content.match(titleReg)[0] : article.name;
           content = data ? content.replace(title, '') : '打开该文件遇到问题...';
+          //去除标题的h1标签
+          title = data ? title.match(titleReg)[1] : '打开该文件遇到问题';
           resolve({
             _id: article._id,
             title,
@@ -147,7 +147,7 @@ class ArticleController {
 
   // 获取文章列表
   static async get_list(ctx) {
-    let limit = ctx.query.limit || 5;
+    let limit = parseInt(ctx.query.limit) || 5;
     let page = ctx.query.page || 1;
 
     let skipPage = limit * (page - 1);
@@ -177,7 +177,10 @@ class ArticleController {
           fs.readFile('./articles/' + file.name, 'utf-8', async (err, data) => {
             let content = data ? marked(data.match(summaryReg)[0]) : '';
             let title = data ? content.match(titleReg)[0] : file.name;
+            //去除标题之后的摘要
             content = data ? content.replace(title, '') : '打开该文件遇到问题';
+            //去除标题的h1标签
+            title = data ? title.match(titleReg)[1] : '打开该文件遇到问题';
             resolve({
               _id:file._id,
               title,
@@ -204,6 +207,8 @@ class ArticleController {
   // 获取总页数
   static async get_totoal_page (ctx) {
     let limit = ctx.query.limit || 5;
+    console.log(limit);
+    
 
     let count = await ArticleModel.count({});
     // 将总的文章数量除以一页显示的文章数， 得到的结果向上取整即可
