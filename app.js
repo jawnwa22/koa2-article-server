@@ -3,16 +3,19 @@ import logger from 'koa-logger';
 import koaBody from 'koa-body';
 import path from 'path';
 import cors from 'koa2-cors';
+import jwt from 'koa-jwt';
 
 import Router from './rest/routes/index';
 import {env} from './config/common';
 import response_middleware from './rest/middlewares/response';
 import filter_middleware from './rest/middlewares/filter';
+import jwt_middleware from './rest/middlewares/jwt-handle';
 import './config/check_dir';
 import './rest/models/db';
 
 const app = new koa();
 const port = env[process.env.NODE_ENV || 'development'].port;
+const secret = env[process.env.NODE_ENV || 'development'].secret; 
 
 app
   .use(logger())
@@ -32,6 +35,13 @@ app
 
 app.use(response_middleware);
 app.use(filter_middleware);
+app.use(jwt_middleware);
+app.use(jwt({
+    secret
+  }).unless({
+    //除了URL带 /admin 的API需要认证token，其他的API都不需要认证
+    path: /^(?!.*admin).*/
+  }))
 app.use(Router.routes());
 
 app.listen(port, () => {
