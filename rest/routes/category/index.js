@@ -9,7 +9,8 @@ import Category from '../../controllers/category';
 const router = new Router();
 
 router
-  .post('/category', Category.add);
+  .post('/category', Category.add)
+  .get('/category', Category.show);
 
 
 export default router;
