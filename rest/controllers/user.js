@@ -1,25 +1,21 @@
 /**
- * @description 管理用户登陆的相关接口层
+ * @description 管理用户的相关接口层
  * 
  */
 
 import md5 from 'md5';
-import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
-import '../models/index';
+import { UserModel, BlogModel } from '../models/index';
 import {env} from '../../config/common';
 
-
-const UserModel = mongoose.model('User');
 const secret = env[process.env.NODE_ENV || 'development'].secret; 
-
 class BackendUser {
 
-  static async create_user(ctx) {
+  static async createUser(ctx) {
     const { username, password } = ctx.request.body;
 
     //添加账号到数据库
-    const add_user = (username, password) => {
+    const addUser = (username, password) => {
       let user = {
         username,
         password: md5(password)
@@ -35,7 +31,7 @@ class BackendUser {
     
     isExist ? 
       ctx.error({msg: '该账号已存在!'}) :
-      (await add_user(username, password)) &&
+      (await addUser(username, password)) &&
       ctx.success({msg: '注册成功！'})
 
   }
@@ -79,7 +75,7 @@ class BackendUser {
     
   }
 
-  static async auth_refresh_token(ctx) {
+  static async authRefreshToken(ctx) {
     const { refreshToken } = ctx.request.body
 
     // 生成token的函数
@@ -127,13 +123,43 @@ class BackendUser {
         
       }
     })
-
-    
-    
   }
 
-  static async token_test (ctx) {
+  // 用于测试token的接口
+  static async tokenTest (ctx) {
     ctx.success({msg: 'token认证成功！'});
+  }
+
+  // 设置站点信息
+  static async setWebInfo (ctx) {
+    console.log(ctx.request.body);
+    
+    const { 
+      websiteName, 
+      description, 
+      master } = ctx.request.body;
+    
+    // 删除之前的文档
+    await BlogModel.deleteMany({});
+    await BlogModel.create({
+      websiteName,
+      description,
+      master
+    }) && 
+      ctx.success({msg: "修改网站信息成功"})
+
+  }
+
+  // 获取站点信息
+  static async getWebInfo (ctx) {
+    let webInfo = await BlogModel.find({});
+    webInfo && webInfo.length ? ctx.success({
+        msg: "获取站点信息成功！",
+        data: webInfo[0]
+      }) :
+      ctx.success({
+        msg: "没有找到站点信息！"
+      })
   }
 }
 
