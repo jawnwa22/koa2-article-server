@@ -5,12 +5,8 @@
 import mongoose from 'mongoose';
 import marked from 'marked';
 import fs from 'fs';
-import '../models/index';
+import { ArticleModel, CategoryModel, TagModel } from '../models/index';
 
-
-const ArticleModel = mongoose.model('Article');
-const CategoryModel = mongoose.model('Category');
-const TagModel = mongoose.model('Tag')
 
 class ArticleController {
 
