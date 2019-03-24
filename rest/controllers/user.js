@@ -80,7 +80,7 @@ class BackendUser {
   }
 
   static async auth_refresh_token(ctx) {
-    const refreshToken = ctx.request.body.refresh_token;
+    const { refreshToken } = ctx.request.body
 
     // 生成token的函数
     const getToken = (username, secret) => {
