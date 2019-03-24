@@ -9,10 +9,12 @@ import User from '../../controllers/user';
 const router = new Router();
 
 router
-  .post('/register', User.create_user)
+  .post('/register', User.createUser)
   .post('/login', User.signIn)
-  .post('/refresh_token', User.auth_refresh_token)
-  .get('/admin/auth_token', User.token_test)
+  .post('/refresh_token', User.authRefreshToken)
+  .get('/admin/auth_token', User.tokenTest)
+  .post('/website_info', User.setWebInfo)
+  .get('/website_info', User.getWebInfo)
 
 
 export default router;
