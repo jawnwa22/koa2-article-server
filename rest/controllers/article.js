@@ -53,7 +53,12 @@ class ArticleController {
     const moveToAricles = (file) => {
       return new Promise((resolve, reject) => {
         fs.rename(file.path, './articles/' + file.name, (err) => {
+<<<<<<< Updated upstream
           err ? reject(err) : resolve(true);
+=======
+          !err && reject(err);
+          resolve(true);
+>>>>>>> Stashed changes
         })
       })
     }
@@ -62,7 +67,12 @@ class ArticleController {
     const removeFile = (file) => {
       return new Promise((resolve, reject) => {
         fs.unlink(file.path, function (err) {
+<<<<<<< Updated upstream
           err ? reject(err) : resolve(true);
+=======
+          !err && reject(err);
+          resolve(true);
+>>>>>>> Stashed changes
         })
       })
  
