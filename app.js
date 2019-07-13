@@ -6,7 +6,7 @@ import cors from 'koa2-cors';
 import jwt from 'koa-jwt';
 
 import Router from './rest/routes/index';
-import {env} from './config/common';
+import config from './config/env';
 import response_middleware from './rest/middlewares/response';
 import filter_middleware from './rest/middlewares/filter';
 import jwt_middleware from './rest/middlewares/jwt-handle';
@@ -14,8 +14,8 @@ import './config/check_dir';
 import './rest/models/db';
 
 const app = new koa();
-const port = env[process.env.NODE_ENV || 'development'].port;
-const secret = env[process.env.NODE_ENV || 'development'].secret; 
+const port = config.port;
+const secret = config.secret;
 
 app
   .use(logger())
