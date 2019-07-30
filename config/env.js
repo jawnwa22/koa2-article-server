@@ -12,6 +12,7 @@ const env = {
     development: {
         port: 5000,
         secret: "jwt-secret",
+        register_code: "jawnwa22",
         mongo: {
             url: "mongodb://fancyd:123456qq@mickeyhouse.top:27017/test"
         }
@@ -21,6 +22,7 @@ const env = {
     production: {
         port: 6000,
         secret: "jwt-secret",
+        register_code: "jawnwa22",        
         mongo: {
             url: "mongodb://fancyd:123456qq@mickeyhouse.top:27017/blog"
         }
