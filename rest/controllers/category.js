@@ -3,7 +3,7 @@
  * @since: 2019-07-12 20:35:37
  * @Author: jawnwa22
  * @LastEditors: jawnwa22
- * @LastEditTime: 2019-08-04 12:11:53
+ * @LastEditTime: 2019-08-04 12:51:12
  */
 
 import { CategoryModel } from "../models/index";
@@ -17,19 +17,24 @@ class Category {
      */
     static async add(ctx) {
         let cate  = ctx.query["cate[]"];
-        console.log(cate);
         
-        let promiseArr = [];
-        cate.forEach(item => {
-            promiseArr[promiseArr.length] = new Promise(resolve => {
-                resolve(CategoryModel.create({
-                    cate_name: item
-                }))
+        //判断cate是否为array
+        if (cate instanceof Array) {
+            
+            let promiseArr = [];
+            cate.forEach(item => {
+                promiseArr[promiseArr.length] = new Promise(resolve => {
+                    resolve(CategoryModel.create({
+                        cate_name: item
+                    }))
+                })
             })
-        })
-        let arr = await Promise.all(promiseArr);
-        console.log(arr);
-        
+            await Promise.all(promiseArr);
+        } else {
+            await CategoryModel.create({
+                cate_name: cate
+            })
+        }
         ctx.success({
             msg: "添加成功",
         })
