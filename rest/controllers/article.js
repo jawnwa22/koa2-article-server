@@ -3,7 +3,7 @@
  * @since: 2019-07-12 20:35:46
  * @Author: jawnwa22
  * @LastEditors: jawnwa22
- * @LastEditTime: 2019-07-13 10:53:47
+ * @LastEditTime: 2019-08-04 09:57:25
  */
 
 import mongoose from "mongoose";
@@ -176,12 +176,22 @@ class ArticleController {
             });
         });
 
-
         !mdlist.length
-            ? ctx.error({ msg: "文章列表为空" })
+            ? ctx.success({
+                  msg: "文章列表为空",
+                  data: {
+                      limit,
+                      page,
+                      result: []
+                  }
+              })
             : ctx.success({
                   msg: "文章列表获取成功",
-                  data: await Promise.all(promiseArr)
+                  data: {
+                      limit,
+                      page,
+                      result: await Promise.all(promiseArr)
+                  }
               });
     }
 
