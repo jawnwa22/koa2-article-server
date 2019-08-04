@@ -15,7 +15,7 @@ export default async (ctx, next) => {
     ctx.body = { code: 'error', msg };
   }
   ctx.success = ({ msg, data }) => {
-    ctx.body = { code: 'success', msg, data };
+    ctx.body = { code: '0', msg, data };
   }
   await next();
 };
