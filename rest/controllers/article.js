@@ -3,7 +3,7 @@
  * @since: 2019-07-12 20:35:46
  * @Author: jawnwa22
  * @LastEditors: jawnwa22
- * @LastEditTime: 2019-08-04 09:57:25
+ * @LastEditTime: 2019-08-04 10:10:40
  */
 
 import mongoose from "mongoose";
@@ -159,6 +159,8 @@ class ArticleController {
             .skip(skipPage)
             .limit(limit)
             .exec();
+        // 获取文章数量
+        let total = await ArticleModel.count();
 
         let promiseArr = []; // 装入promise对象
         mdlist.forEach(md => {
@@ -182,6 +184,7 @@ class ArticleController {
                   data: {
                       limit,
                       page,
+                      total,
                       result: []
                   }
               })
@@ -190,6 +193,7 @@ class ArticleController {
                   data: {
                       limit,
                       page,
+                      total,
                       result: await Promise.all(promiseArr)
                   }
               });
