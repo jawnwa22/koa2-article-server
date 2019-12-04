@@ -4,3 +4,4 @@ env.js
 articles
 uploads
 .DS_Store
+dist
