@@ -4,8 +4,9 @@
   "description": "article server",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npx babel-node ./src/app.js",
+    "watch": "nodemon",
+    "build": "npx babel src --out-dir dist"
   },
   "keywords": [],
   "author": "jawnwa22",
@@ -15,6 +16,7 @@
     "@babel/core": "^7.3.4",
     "@babel/node": "^7.7.0",
     "@babel/preset-env": "^7.3.4",
+    "global": "^4.4.0",
     "jsonwebtoken": "^8.5.0",
     "koa": "^2.7.0",
     "koa-body": "^4.1.0",
@@ -24,6 +26,7 @@
     "koa2-cors": "^2.0.6",
     "marked": "^0.7.0",
     "md5": "^2.2.1",
-    "mongoose": "^5.4.17"
+    "mongoose": "^5.4.17",
+    "nodemon": "^2.0.1"
   }
 }
